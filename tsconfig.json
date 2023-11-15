@@ -1,6 +1,15 @@
 {
-  "extends": "expo/tsconfig.base",
-  "compilerOptions": {
-    "strict": true
-  }
+	"extends": "expo/tsconfig.base",
+	"compilerOptions": {
+		"strict": true,
+		"baseUrl": "./",
+		"paths": {
+			"@esp/*": ["./fonte/espolios/*"],
+			"@comp/*": ["./fonte/componentes/*"],
+			"@rota/*": ["./fonte/rotas/*"],
+			"@tela/*": ["./fonte/telas/*"],
+			"@arm/*": ["./fonte/armazenamento/*"],
+			"@util/*": ["./fonte/utilitarios/*"]
+		}
+	}
 }
