@@ -2,14 +2,26 @@ import Cabecalho from "@comp/Cabecalho";
 import { Conteiner } from "./estilos";
 import Destaque from "@comp/Destaque";
 import GrupoCartao from "@comp/GrupoCartao";
+import { useState } from "react";
+import { FlatList } from "react-native";
+import ListaVazia from "@comp/ListaVazia";
+import Botao from "@comp/Botao";
 
 export default function Grupos() {
+	const [grupos, defGrupos] = useState<string[]>([]);
+
 	return (
 		<Conteiner>
 			<Cabecalho />
 			<Destaque titulo="Turmas" subtitulo="Jogue com a sua turma" />
-
-			<GrupoCartao titulo="Galera do Ignite" />
+			<FlatList
+				data={grupos}
+				keyExtractor={(item) => item}
+				renderItem={({ item }) => <GrupoCartao titulo={item} />}
+				ListEmptyComponent={<ListaVazia mensagem="Que tal cadastrar a primeira turma?" />}
+				contentContainerStyle={grupos.length == 0 && { flex: 1 }}
+			/>
+			<Botao titulo="Criar nova turma" />
 		</Conteiner>
 	);
 }
