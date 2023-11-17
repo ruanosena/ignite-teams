@@ -3,9 +3,7 @@ import { useFonts, Roboto_400Regular, Roboto_700Bold } from "@expo-google-fonts/
 import { ThemeProvider } from "styled-components/native";
 import Carregando from "@comp/Carregando";
 import { StatusBar } from "react-native";
-import Grupos from "@tela/Grupos";
-import NovoGrupo from "@tela/NovoGrupo";
-import Participantes from "@tela/Participantes";
+import Rotas from "./fonte/rotas";
 
 export default function App() {
 	const [fontesCarregadas] = useFonts({ Roboto_400Regular, Roboto_700Bold });
@@ -13,7 +11,7 @@ export default function App() {
 	return (
 		<ThemeProvider theme={tema}>
 			<StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-			{fontesCarregadas ? <Participantes /> : <Carregando />}
+			{fontesCarregadas ? <Rotas /> : <Carregando />}
 		</ThemeProvider>
 	);
 }

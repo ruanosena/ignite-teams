@@ -10,7 +10,6 @@ module.exports = function (api) {
 					alias: {
 						"@esp": "./fonte/espolios",
 						"@comp": "./fonte/componentes",
-						"@rota": "./fonte/rotas",
 						"@tela": "./fonte/telas",
 						"@arm": "./fonte/armazenamento",
 						"@util": "./fonte/utilitarios",

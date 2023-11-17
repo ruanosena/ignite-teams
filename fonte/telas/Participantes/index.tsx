@@ -9,15 +9,23 @@ import { useState } from "react";
 import ParticipanteCartao from "@comp/ParticipanteCartao";
 import ListaVazia from "@comp/ListaVazia";
 import Botao from "@comp/Botao";
+import { useRoute } from "@react-navigation/native";
+
+type RotaParams = {
+	grupo: string;
+};
 
 export default function Participantes() {
 	const [time, defTime] = useState<string>("Time A");
 	const [participantes, defParticipantes] = useState<string[]>([]);
 
+	const rota = useRoute();
+	const { grupo } = rota.params as RotaParams;
+
 	return (
 		<Conteiner>
 			<Cabecalho mostrarBotaoVoltar />
-			<Destaque titulo="Nome da turma" subtitulo="adicione a galera e separe os times" />
+			<Destaque titulo={grupo} subtitulo="adicione a galera e separe os times" />
 			<Form>
 				<Entrada placeholder="Nome da pessoa" autoCorrect={false} />
 				<BotaoIcone icone="add" />
