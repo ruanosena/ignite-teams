@@ -16,12 +16,14 @@ import addParticipantePorGrupo from "@arm/participante/addParticipantePorGrupo";
 import obterParticipantesPorGrupoETime from "@arm/participante/obterParticipantesPorGrupoETime";
 import removerParticipantePorGrupo from "@arm/participante/removerParticipantePorGrupo";
 import removerGrupoPorNome from "@arm/grupo/removerGrupoPorNome";
+import Carregando from "@comp/Carregando";
 
 type RotaParams = {
 	grupo: string;
 };
 
 export default function Participantes() {
+	const [estaCarregando, defEstaCarregando] = useState<boolean>(true);
 	const [novoParticipanteNome, defNovoParticipanteNome] = useState<string>("");
 	const [time, defTime] = useState<string>("Time A");
 	const [participantes, defParticipantes] = useState<ParticipanteArmDTO[]>([]);
@@ -57,6 +59,7 @@ export default function Participantes() {
 
 	async function buscarParticipantesPorTime() {
 		try {
+			defEstaCarregando(true);
 			const participantes = await obterParticipantesPorGrupoETime(grupo, time);
 			defParticipantes(participantes);
 		} catch (erro) {
@@ -65,6 +68,8 @@ export default function Participantes() {
 				"Participantes",
 				"Não foi possível carregar os participantes do time selecionado."
 			);
+		} finally {
+			defEstaCarregando(false);
 		}
 	}
 
@@ -84,12 +89,12 @@ export default function Participantes() {
 			navegacao.navigate("grupos");
 		} catch (erro) {
 			console.log(erro);
-			Alert.alert("Remover grupo", "Não foi possível remover o grupo.")
+			Alert.alert("Remover truema", "Não foi possível remover a turma.");
 		}
 	}
 
 	async function lidarRemoverGrupo() {
-		Alert.alert("Remover", "Deseja remover o grupo?", [
+		Alert.alert("Remover", "Deseja remover a turma?", [
 			{ text: "Não", style: "cancel" },
 			{ text: "Sim", onPress: removerGrupo },
 		]);
@@ -126,19 +131,23 @@ export default function Participantes() {
 				/>
 				<NumeroDeParticipantes>{participantes.length}</NumeroDeParticipantes>
 			</CabecalhoLista>
-			<FlatList
-				data={participantes}
-				keyExtractor={(item) => item.nome}
-				renderItem={({ item }) => (
-					<ParticipanteCartao
-						nome={item.nome}
-						aoRemover={() => lidarRemoverParticipante(item.nome)}
-					/>
-				)}
-				ListEmptyComponent={<ListaVazia mensagem="Não há pessoas nesse time." />}
-				showsVerticalScrollIndicator={false}
-				contentContainerStyle={[{ paddingBottom: 100 }, !participantes.length && { flex: 1 }]}
-			/>
+			{estaCarregando ? (
+				<Carregando />
+			) : (
+				<FlatList
+					data={participantes}
+					keyExtractor={(item) => item.nome}
+					renderItem={({ item }) => (
+						<ParticipanteCartao
+							nome={item.nome}
+							aoRemover={() => lidarRemoverParticipante(item.nome)}
+						/>
+					)}
+					ListEmptyComponent={<ListaVazia mensagem="Não há pessoas nesse time." />}
+					showsVerticalScrollIndicator={false}
+					contentContainerStyle={[{ paddingBottom: 100 }, !participantes.length && { flex: 1 }]}
+				/>
+			)}
 
 			<Botao titulo="Remover turma" tipo="SECUNDARIO" onPress={lidarRemoverGrupo} />
 		</Conteiner>
