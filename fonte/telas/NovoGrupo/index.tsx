@@ -5,13 +5,30 @@ import Botao from "@comp/Botao";
 import Entrada from "@comp/Entrada";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import criarGrupo from "@arm/grupo/criarGrupo";
+import { AppErro } from "@util/AppErro";
+import { Alert } from "react-native";
 
 export default function NovoGrupo() {
-	const navegacao = useNavigation();
 	const [grupo, defGrupo] = useState("");
+	const navegacao = useNavigation();
 
-	function lidarNovo() {
-		navegacao.navigate("participantes", { grupo });
+	async function lidarNovo() {
+		try {
+			if (!grupo.trim()) {
+				return Alert.alert("Novo grupo", "Informe o nome da turma.")
+			}
+
+			await criarGrupo(grupo);
+			navegacao.navigate("participantes", { grupo });
+		} catch (erro) {
+			if (erro instanceof AppErro) {
+				Alert.alert("Novo grupo", erro.mensagem);
+			} else {
+				Alert.alert("Novo grupo", "Não foi possível criar um novo grupo.");
+				console.log(erro);
+			}
+		}
 	}
 
 	return (
